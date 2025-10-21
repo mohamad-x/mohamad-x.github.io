@@ -24,7 +24,7 @@ export const cursorBlob = svg(`
 </svg>`)
 
 // Public file shortcuts (no bundler import needed)
-export const profilePhoto = '/profile.jpg';
+export const profilePhoto = '/profile.png';
 export const wolfLogo = '/logo.png';
 
 /* UI / Social */
