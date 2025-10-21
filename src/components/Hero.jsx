@@ -1,4 +1,6 @@
+// /src/components/Hero.jsx
 import React, { useEffect, useRef } from 'react'
+import { profilePhoto } from '../assets/index.js'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { brand } from '../constants/index.js'
 
@@ -7,7 +9,7 @@ export default function Hero(){
   const parallaxRef = useRef(null)
   const magRefs = useRef([])
 
-  // ===== Parallax background glow (kept from before)
+  // ===== Parallax background glow
   useEffect(()=>{
     const onMove = (e)=>{
       const r = slabRef.current?.getBoundingClientRect()
@@ -22,7 +24,7 @@ export default function Hero(){
     return ()=> el?.removeEventListener('pointermove', onMove)
   },[])
 
-  // ===== Magnetic buttons (kept)
+  // ===== Magnetic buttons
   useEffect(()=>{
     const strength = 24
     const enter = (e, btn) => btn.animate({ transform: 'scale(1.02)' }, {duration:120, fill:'forwards'})
@@ -34,18 +36,22 @@ export default function Hero(){
       btn.style.transform = `translate(${x/strength}px, ${y/strength}px) scale(1.02)`
     }
     magRefs.current.forEach(btn=>{
+      if(!btn) return
       btn.addEventListener('pointerenter', (ev)=>enter(ev, btn))
       btn.addEventListener('pointerleave', (ev)=>leave(ev, btn))
       btn.addEventListener('pointermove',  (ev)=>move(ev, btn))
     })
     return ()=>{
-      magRefs.current.forEach(btn=>{
-        btn.replaceWith(btn.cloneNode(true))
+      magRefs.current.forEach((btn, idx)=>{
+        if(!btn) return
+        const clone = btn.cloneNode(true)
+        btn.replaceWith(clone)
+        magRefs.current[idx] = clone
       })
     }
   },[])
 
-  // ===== Interactive Logo: cursor tilt + float
+  // ===== Interactive image: cursor tilt + float
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const rx = useTransform(y, [-60, 60], [10, -10])  // rotateX
@@ -71,12 +77,19 @@ export default function Hero(){
           <motion.div
             initial={{opacity:0, y:20}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:.6}}
           >
-            <span className="badge"><span style={{width:8,height:8,borderRadius:999,background:'#7df3d6',display:'inline-block'}}></span> {brand.title}</span>
+            <span className="badge">
+              <span style={{width:8,height:8,borderRadius:999,background:'#7df3d6',display:'inline-block'}}></span>
+              {' '}{brand.title}
+            </span>
+
             <h1 style={{ display:'flex', alignItems:'center', gap:12 }}>
-              <img src={brand.logo} width="40" height="40" style={{ borderRadius:'50%' }} alt="logo"/>
+              {/* SWAP: small round headshot next to name */}
+              <img src={profilePhoto} width="40" height="40" style={{ borderRadius:'50%' }} alt="Mohamad Abdulazim" />
               {brand.name}
             </h1>
+
             <p>{brand.summary}</p>
+
             <div className="cta-row">
               <a
                 ref={el=>magRefs.current[0]=el}
@@ -98,39 +111,35 @@ export default function Hero(){
           </motion.div>
         </div>
 
-        {/* RIGHT: INTERACTIVE LOGO */}
+        {/* RIGHT: INTERACTIVE IMAGE (now the headshot) */}
         <motion.div
           ref={slabRef}
           className="hero-slab card logo-plate"
           initial={{opacity:0, y:20}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{delay:.1, duration:.7}}
           onPointerMove={onCardMove}
           onPointerLeave={onCardLeave}
-          style={{
-            minHeight: 360,
-            transformStyle: 'preserve-3d',
-            perspective: 900
-          }}
+          style={{ minHeight: 360, transformStyle: 'preserve-3d', perspective: 900 }}
         >
           <div ref={parallaxRef} className="hero-parallax" />
           <motion.div
             className="logo-wrap"
-            style={{
-              rotateX: srx,
-              rotateY: sry
-            }}
+            style={{ rotateX: srx, rotateY: sry }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             transition={{ type:'spring', stiffness: 200, damping: 16 }}
           >
             <div className="logo-glow" aria-hidden="true"></div>
+
+            {/* SWAP: main big image is the profile photo */}
             <img
-              src={brand.logo}
-              alt="Mohamad Abdulazim logo"
+              src={profilePhoto}
+              alt="Mohamad Abdulazim portrait"
               className="logo-img"
               width="260"
               height="260"
               draggable="false"
             />
+
             <button
               className="btn logo-cta"
               onClick={()=>document.querySelector('#works')?.scrollIntoView({behavior:'smooth'})}
