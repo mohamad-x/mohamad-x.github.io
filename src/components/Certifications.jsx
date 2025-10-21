@@ -1,132 +1,130 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { certifications } from '../constants/index.js'
 
 export default function Certifications(){
-  const trackRef = useRef(null)
-  const [active, setActive] = useState(0)
-  const [dragging, setDragging] = useState(false)
-  const dragRef = useRef({ startX: 0, startScroll: 0, moved: 0 })
+  const items = useMemo(() => certifications ?? [], [])
+  const [i, setI] = useState(0)
+  const wrapRef = useRef(null)
+  const railRef = useRef(null)
 
-  // update active dot based on scroll position
-  useEffect(()=>{
-    const el = trackRef.current
-    if(!el) return
-    const onScroll = () => {
-      const w = el.clientWidth
-      const i = Math.round(el.scrollLeft / w)
-      setActive(Math.max(0, Math.min(certifications.length - 1, i)))
+  const clampIndex = useCallback((n) => {
+    const L = items.length
+    if (L === 0) return 0
+    return ((n % L) + L) % L
+  }, [items.length])
+
+  const snapTo = useCallback((idx, smooth = true) => {
+    const rail = railRef.current
+    if (!rail || !rail.children?.length) return
+    const node = rail.children[clampIndex(idx)]
+    if (!node) return
+    const left = node.offsetLeft - 6 // account for padding gap in rail
+    rail.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' })
+  }, [clampIndex])
+
+  const go = useCallback((delta) => {
+    setI(prev => {
+      const next = clampIndex(prev + delta)
+      // snap after state updates in effect
+      return next
+    })
+  }, [clampIndex])
+
+  // Snap whenever index changes
+  useEffect(() => { snapTo(i) }, [i, snapTo])
+
+  // Re-snap on resize
+  useEffect(() => {
+    const onR = () => snapTo(i, false)
+    window.addEventListener('resize', onR)
+    return () => window.removeEventListener('resize', onR)
+  }, [i, snapTo])
+
+  // Keep "center" class updated
+  useEffect(() => {
+    const rail = railRef.current
+    if (!rail) return
+    for (let k = 0; k < rail.children.length; k++) {
+      rail.children[k].classList.toggle('is-center', k === i)
     }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    return ()=> el.removeEventListener('scroll', onScroll)
-  },[])
+  }, [i])
 
-  // LEFT-click drag instead of right-click
-  const onPointerDown = (e)=>{
-    if(e.button !== 0) return               // left button only
-    const el = trackRef.current
-    if(!el) return
-    setDragging(true)
-    dragRef.current.startX = e.clientX
-    dragRef.current.startScroll = el.scrollLeft
-    dragRef.current.moved = 0
-    el.setPointerCapture?.(e.pointerId)
-  }
-  const onPointerMove = (e)=>{
-    if(!dragging) return
-    const el = trackRef.current
-    const dx = (e.clientX - dragRef.current.startX)
-    dragRef.current.moved = Math.max(dragRef.current.moved, Math.abs(dx))
-    el.scrollLeft = dragRef.current.startScroll - dx * 1.2
-  }
-  const endDrag = (e)=>{
-    if(!dragging) return
-    setDragging(false)
-    const el = trackRef.current
-    el.releasePointerCapture?.(e.pointerId)
-    // snap to nearest slide
-    const w = el.clientWidth
-    el.scrollTo({ left: Math.round(el.scrollLeft / w) * w, behavior: 'smooth' })
-  }
-
-  const goTo = (i)=>{
-    const el = trackRef.current
-    el?.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
-  }
-
-  // prevent accidental click-through while dragging
-  const suppressClickIfDragged = (e)=>{
-    if(dragRef.current.moved > 6){ e.preventDefault(); e.stopPropagation(); }
-  }
+  if (!items.length) return null
 
   return (
     <section className="section" id="certs" aria-label="Certifications">
       <h2>Certifications</h2>
 
-      <div
-        className={`certs-carousel clean ${dragging ? 'dragging' : ''}`}
-        ref={trackRef}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
-        onClick={suppressClickIfDragged}
-      >
-        {certifications.map((c, i)=>{
-          const isCenter = i === active
-          const scale = isCenter ? 1 : 0.96
-          const lift = isCenter ? -6 : 0
-          return (
-            <article
-              key={i}
-              className={`cert-card ${isCenter ? 'is-center' : ''}`}
-              style={{ transform: `translateY(${lift}px) scale(${scale})` }}
-              role="group"
-              aria-label={`${c.name} — ${c.issuer}`}
-            >
-              <div className="cert-card__top">
-                {c.logo && <img className="cert-card__logo" src={c.logo} alt="" width="48" height="48" />}
-              </div>
+      <div ref={wrapRef} className="certs-wrap">
+        {/* Left Arrow */}
+        <button
+          className="certs-arrow certs-arrow--left"
+          type="button"
+          aria-label="Previous certification"
+          onClick={() => go(-1)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
 
-              <h3 className="cert-card__title">{c.name}</h3>
-              <div className="cert-card__issuer">{c.issuer}</div>
-
-              {(c.issued || c.expires) && (
-                <div className="cert-card__dates">
-                  {c.issued && <>Issued: {c.issued}</>}
-                  {c.issued && c.expires && ' • '}
-                  {c.expires && <>Expires: {c.expires}</>}
+        {/* Rail */}
+        <div
+          ref={railRef}
+          className="certs-carousel clean no-drag"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Certification cards"
+        >
+          {items.map((c, idx) => (
+            <article key={idx} className={`cert-card ${idx===i?'is-center':''}`} role="group" aria-label={c.name}>
+              <div className="cert-card__top" style={{gap:12}}>
+                <img className="cert-card__logo" src={c.logo} alt="" width="48" height="48" />
+                <div>
+                  <div className="cert-card__title">{c.name}</div>
+                  <div className="cert-card__issuer">{c.issuer}{c.issued ? ` • ${c.issued}` : ''}</div>
+                  {c.url && (
+                    <a className="cert-card__cta" href={c.url} target="_blank" rel="noreferrer">
+                      View credential
+                    </a>
+                  )}
                 </div>
-              )}
-
+              </div>
               {Array.isArray(c.details) && c.details.length > 0 && (
                 <ul className="cert-card__bullets">
-                  {c.details.slice(0,6).map((b, idx)=> <li key={idx}>{b}</li>)}
+                  {c.details.map((d, j) => <li key={j}>{d}</li>)}
                 </ul>
               )}
-
-              {c.url && (
-                <a className="btn cert-card__cta" href={c.url} target="_blank" rel="noreferrer">
-                  View Credential
-                </a>
-              )}
             </article>
-          )
-        })}
+          ))}
+        </div>
+
+        {/* Right Arrow */}
+        <button
+          className="certs-arrow certs-arrow--right"
+          type="button"
+          aria-label="Next certification"
+          onClick={() => go(+1)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
       </div>
 
-      <div className="certs-dots" role="tablist" aria-label="Certification slides">
-        {certifications.map((_, i)=>(
+      {/* Dots */}
+      <div className="certs-dots" role="tablist" aria-label="Certification pagination">
+        {items.map((_, idx) => (
           <button
-            key={i}
-            className={`dot ${i === active ? 'is-active' : ''}`}
-            onClick={()=>goTo(i)}
-            aria-label={`Go to slide ${i+1}`}
-            aria-selected={i===active}
+            key={idx}
+            role="tab"
+            aria-selected={i===idx}
+            className={`dot ${i===idx?'is-active':''}`}
+            onClick={() => setI(idx)}
+            aria-label={`Go to slide ${idx+1}`}
           />
         ))}
       </div>
-
-      <p className="certs-hint">Click & drag to scrub • Hover to read details • Click to open credential</p>
     </section>
   )
 }

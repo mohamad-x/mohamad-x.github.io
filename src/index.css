@@ -1156,3 +1156,81 @@ main{position:relative; z-index:1}
   border-radius:8px;
   transition: width .6s cubic-bezier(.22,1,.36,1);
 }
+
+
+/* ==== Certifications – arrows & no-drag ==== */
+.certs-wrap{
+  position: relative;
+}
+
+.certs-carousel.clean.no-drag{
+  cursor: default;             /* was grab */
+  user-select: none;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 8px 6px 22px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 22px;
+}
+.certs-carousel.clean.no-drag::-webkit-scrollbar{ display:none }
+@media (min-width: 920px){ .certs-carousel.clean.no-drag{ grid-auto-columns: 70%; } }
+@media (min-width: 1280px){ .certs-carousel.clean.no-drag{ grid-auto-columns: 58%; } }
+
+/* Arrow buttons */
+.certs-arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 42px; height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--ring);
+  background: rgba(9,20,31,.65);
+  color: #e6f1ff;
+  display: grid; place-items: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+  opacity: .95;
+}
+.certs-arrow:hover{
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 10px 28px rgba(83,182,255,.24);
+  background: rgba(9,20,31,.8);
+}
+.certs-arrow--left{ left: -4px; }
+.certs-arrow--right{ right: -4px; }
+@media (max-width: 768px){
+  .certs-arrow--left{ left: 2px; }
+  .certs-arrow--right{ right: 2px; }
+}
+
+/* Card visuals remain the same */
+.cert-card{
+  scroll-snap-align: center;
+  border-radius: 20px;
+  border: 1px solid rgba(125,243,214,.12);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  box-shadow: 0 12px 40px rgba(0,0,0,.35), inset 0 0 0 1px rgba(38,70,84,.35);
+  padding: 20px 20px 16px;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  min-height: 260px;
+}
+.cert-card.is-center{
+  box-shadow: 0 30px 60px rgba(83,182,255,.18), inset 0 0 0 1px rgba(125,243,214,.45);
+  background: radial-gradient(120% 140% at 50% -10%, rgba(83,182,255,.08), rgba(255,255,255,.015));
+}
+
+/* Dots stay */
+.certs-dots{ display:flex; gap:8px; justify-content:center; margin-top:6px }
+.dot{
+  width:8px; height:8px; border-radius:50%; background:#314050; border:0; cursor:pointer;
+  transition: transform .15s ease, background .2s ease;
+}
+.dot.is-active{ background:var(--accent); transform: scale(1.25) }
+
+/* Remove the old hint entirely (not rendered anymore). In case it exists in DOM, hide it. */
+.certs-hint{ display:none !important; }
