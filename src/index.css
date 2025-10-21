@@ -1234,3 +1234,75 @@ main{position:relative; z-index:1}
 
 /* Remove the old hint entirely (not rendered anymore). In case it exists in DOM, hide it. */
 .certs-hint{ display:none !important; }
+
+
+/* ========= EDUCATION: hard-center & no-left drift ========= */
+
+/* 1) Make the section itself a centering context */
+section#education,
+#education.section {
+  display: grid;
+  place-items: center;
+}
+
+/* 2) Constrain and center the inner wrap (works even if your HTML uses different class names) */
+section#education .edu-wrap,
+section#education .education-wrap,
+section#education .timeline,
+section#education .list,
+section#education > .container {
+  width: 100%;
+  max-width: 900px;            /* adjust if you want wider/narrower */
+  padding-inline: 16px;
+  margin-inline: auto;         /* <-- keeps it in the middle */
+  display: flex;
+  flex-direction: column;
+  align-items: center;         /* <-- centers children horizontally */
+  gap: 14px;
+}
+
+/* 3) Ensure each education card stays centered and same width */
+section#education .edu-item,
+section#education .education-item,
+section#education .card {
+  width: min(720px, 100%);     /* consistent readable width */
+  margin-inline: auto;         /* force-center even if parent changes */
+}
+
+/* 4) Stop hover transforms from shifting things sideways */
+section#education .edu-item:hover,
+section#education .education-item:hover,
+section#education .card:hover {
+  /* if you previously had translateX(...) in a generic .card:hover, override here */
+  transform: translate3d(0, -4px, 0);   /* only float up, no horizontal shift */
+}
+
+/* 5) If you draw a vertical timeline line, make it absolute so it doesn't push layout */
+section#education .timeline-line,
+section#education .edu-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(125,243,214,.35), rgba(83,182,255,.35));
+  pointer-events: none;
+}
+
+/* 6) Safety: remove any stray left/right margins that fight centering */
+section#education .edu-item,
+section#education .education-item,
+section#education .card {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 7) Mobile tweaks: full-width cards on small screens, still centered */
+@media (max-width: 640px) {
+  section#education .edu-item,
+  section#education .education-item,
+  section#education .card {
+    width: 100%;
+  }
+}
