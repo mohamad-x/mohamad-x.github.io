@@ -23,6 +23,10 @@ export const cursorBlob = svg(`
   <circle cx="300" cy="300" r="280" fill="url(#g)"/>
 </svg>`)
 
+// Public file shortcuts (no bundler import needed)
+export const profilePhoto = '/profile.jpg';
+export const wolfLogo = '/logo.png';
+
 /* UI / Social */
 export const iconLogo = makeIcon('<circle cx="12" cy="12" r="9" stroke="%2353b6ff"/><text x="12" y="16" font-size="9" text-anchor="middle" fill="%23a7ffeb" font-family="Arial">MA</text>')
 export const iconGithub = makeIcon('<path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3 0 6-1.5 6-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C7 1.8 5.9 2.1 5.9 2.1a4.3 4.3 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.5 9c0 4.5 3 6 6 6a3.4 3.4 0 0 0-.9 2.6V22"/>')
