@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Mohamad Abdulazim — Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    :root{
+      --ink:#111827; --muted:#374151; --accent:#0ea5e9; --border:#e5e7eb; --bg:#ffffff;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --ink:#e5e7eb; --muted:#cbd5e1; --accent:#7df3d6; --border:#334155; --bg:#0b1017; }
+      body{ background:#0b1017; }
+      .page{ background:#0f1b28; border-color:#264654; }
+    }
+    *{ box-sizing:border-box }
+    body{ margin:0; font:14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--ink); background:var(--bg) }
+    .page{ max-width:900px; margin:24px auto; padding:28px; border:1px solid var(--border); border-radius:14px; background:#fff }
+    h1,h2{ margin:0 0 6px } h1{ font-size:28px } h2{ font-size:16px; color:var(--muted); letter-spacing:.4px; text-transform:uppercase }
+    .row{ display:flex; gap:18px } .col{ flex:1 }
+    .pill{ display:inline-block; border:1px solid var(--border); border-radius:999px; padding:4px 10px; margin:3px 6px 0 0; font-size:12px }
+    ul{ margin:8px 0 0 18px } li{ margin:6px 0 }
+    .meta{ color:var(--muted) }
+    .sep{ height:1px; background:var(--border); margin:16px 0 }
+    .contact a{ color:var(--accent); text-decoration:none }
+    .hdr{ display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap }
+    .print-note{ font-size:12px; color:var(--muted) }
+    @media print{
+      body{ background:#fff }
+      .page{ border:none; border-radius:0; margin:0; padding:0.7in }
+      .print-note{ display:none }
+      a{ color:inherit; text-decoration:none }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" role="main">
+    <header class="hdr">
+      <div>
+        <h1>Mohamad Abdulazim</h1>
+        <div class="meta">Senior SOC Analyst • Threat Detection Engineer</div>
+      </div>
+      <div class="contact">
+        <div>📧 <a href="mailto:abdulazim.mohamad20@gmail.com">abdulazim.mohamad20@gmail.com</a></div>
+        <div>📞 <a href="tel:+12489186626">(248) 918-6626</a></div>
+        <div>🔗 <a href="https://www.linkedin.com/in/mohamad-abdulazim-651a85199">LinkedIn</a> • <a href="https://github.com/mohamad-x">GitHub</a></div>
+      </div>
+    </header>
+
+    <p class="print-note">Tip: File → Print → Save as PDF (clean layout, ATS-friendly).</p>
+    <div class="sep"></div>
+
+    <section>
+      <h2>Summary</h2>
+      <p>Cybersecurity specialist focused on threat detection, SOC operations, and automation with KQL, Microsoft Defender, Python, and PowerShell. Built detections that reduce false positives and speed up incident response.</p>
+    </section>
+
+    <div class="sep"></div>
+
+    <section>
+      <h2>Experience</h2>
+      <div>
+        <strong>Senior SOC Analyst — New Era Technology</strong> <span class="meta">Detroit, MI · Oct 2022 – Present</span>
+        <ul>
+          <li>Led incident response across Microsoft Defender, Azure Sentinel, Entra ID, SentinelOne, and CrowdStrike; ~20% faster resolution.</li>
+          <li>Built KQL detections tailored per customer to lower false positives by &gt;20%.</li>
+          <li>Proactive threat hunting and reporting to harden defenses.</li>
+          <li>Proofpoint tuning improved spam/phishing detection by ~15%.</li>
+          <li>Mentored junior analysts; delivered tabletops and training.</li>
+        </ul>
+      </div>
+      <div style="height:10px"></div>
+      <div>
+        <strong>IT Security Analyst &amp; Compliance — DTE Energy</strong> <span class="meta">Detroit, MI · Mar 2021 – Oct 2022</span>
+        <ul>
+          <li>Managed GRC audits and improved compliance outcomes by ~10%.</li>
+          <li>Analyzed PCI updates and security data with Alteryx/SAP; clearer executive reporting.</li>
+        </ul>
+      </div>
+      <div style="height:10px"></div>
+      <div>
+        <strong>IT Specialist (Contract) — USCRI</strong> <span class="meta">Dearborn, MI · Aug 2020 – Feb 2021</span>
+        <ul>
+          <li>Modernized local office IT; maintained printers, IoT devices, and security systems.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        <li><strong>IOC Aggregator (Python):</strong> Merges VirusTotal, AbuseIPDB, and CriminalIP into prioritized reports (multithreaded).</li>
+        <li><strong>Multi-IP Port Scanner (PowerShell):</strong> Scans multiple ports across multiple IPs; ~50% less manual SOC toil.</li>
+        <li><strong>Detection Rule Pack (KQL):</strong> Custom Defender/Sentinel rules; noise down, visibility up.</li>
+      </ul>
+    </section>
+
+    <div class="sep"></div>
+
+    <section>
+      <h2>Skills</h2>
+      <div>
+        <span class="pill">KQL</span><span class="pill">Microsoft Defender</span>
+        <span class="pill">Azure Sentinel</span><span class="pill">CrowdStrike</span>
+        <span class="pill">Python</span><span class="pill">PowerShell</span>
+        <span class="pill">Azure</span><span class="pill">AWS</span>
+        <span class="pill">MITRE ATT&amp;CK</span><span class="pill">NIST / SOC 2 / PCI / ITIL</span>
+      </div>
+    </section>
+
+    <div class="sep"></div>
+
+    <section>
+      <h2>Certifications</h2>
+      <div>
+        <span class="pill">Microsoft: Security Operations Analyst Associate</span>
+        <span class="pill">CompTIA Security+</span>
+        <span class="pill">AWS Cloud Practitioner</span>
+        <span class="pill">ITIL Foundation</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
