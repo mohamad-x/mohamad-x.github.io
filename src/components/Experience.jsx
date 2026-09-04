@@ -2,10 +2,9 @@ import React from "react";
 import Section from "./Section";
 import { DATA } from "../data";
 
-
 export default function Experience(){
   return (
-    <Section id="experience" title="Experience" sub="Impact with clear metrics.">
+    <Section id="experience" title="Experience" sub="Security operations, compliance, risk, and remediation across MSSP and regulated environments.">
       <div className="timeline">
         {DATA.jobs.map((j, idx) => (
           <article key={`${j.company}-${j.role}`} className="tl-item">
@@ -13,8 +12,8 @@ export default function Experience(){
             <div className="tl-card">
               <header className="tl-head">
                 <div>
-                <div className="tl-role">{j.role}</div>
-                <div className="tl-company muted">{j.company}</div>
+                  <div className="tl-role">{j.role}</div>
+                  <div className="tl-company muted">{j.company}</div>
                 </div>
                 <div className="tl-dates muted">{j.dates}</div>
               </header>
@@ -22,8 +21,8 @@ export default function Experience(){
                 {j.bullets.map((b,i) => <li key={i}>{b}</li>)}
               </ul>
             </div>
-            </article>
-          ))}
+          </article>
+        ))}
       </div>
     </Section>
   )
