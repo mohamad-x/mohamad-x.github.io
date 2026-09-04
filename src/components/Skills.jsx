@@ -4,7 +4,7 @@ import { DATA } from "../data";
 
 export default function Skills(){
   return (
-    <Section id="skills" title="Skills" sub="Operational depth with automation‑first mindset.">
+    <Section id="skills" title="Skills" sub="Security operations backed by governance, risk, compliance, resilience, and automation.">
       <div className="grid cols-3">
         {DATA.skills.map(g => (
           <div key={g.group} className="card">
