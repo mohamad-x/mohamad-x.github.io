@@ -27,12 +27,11 @@ export default function Navbar(){
         <div className="brand">Mohamad Abdulazim</div>
         <nav className="nav-links">
           {["#about","#skills","#experience","#projects","#education","#certifications","#contact"].map(id => (
-              <a key={id} href={id} data-scroll-to={id}>{id.replace("#","").replace(/^[a-z]/, m => m.toUpperCase())}</a>
+            <a key={id} href={id} data-scroll-to={id}>{id.replace("#","").replace(/^[a-z]/, m => m.toUpperCase())}</a>
           ))}
         </nav>
-        {/* Resume CTA on the far right */}
-        <a className="btn-nav" href="/resume.pdf" target="_blank" rel="noreferrer">Resume</a>
-        </div>
+        <a className="btn-nav" href="/resume.html" target="_blank" rel="noreferrer">Resume</a>
+      </div>
     </div>
   )
 }
