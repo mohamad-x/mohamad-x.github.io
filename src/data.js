@@ -8,7 +8,7 @@ export const DATA = {
     phone: "+1 (248) 918-6626",
     github: "https://github.com/mohamad-x",
     linkedin: "https://www.linkedin.com/in/mohamad-abdulazim-651a85199/",
-    resume: "/resume.pdf"
+    resume: "/resume.html"
   },
 
   skills: [
